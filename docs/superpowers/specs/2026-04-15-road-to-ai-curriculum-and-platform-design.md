@@ -387,40 +387,41 @@ Text-heavy learning material burns out cold-start learners fast. Both the platfo
 | Code highlighting | **Shiki** with VS Code themes (light + dark) | All code blocks |
 | Interactive widgets | Iframed React islands (optional, lesson-specific) | e.g., a gradient descent visualizer for F14 — ship when the lesson *really* benefits |
 
-**Platform-level visual identity:**
+**Platform-level visual identity — inherits from `xavierloo.com`.**
 
-- **Typography stack** — layered, not monolithic:
-  - **UI sans:** Inter or Geist — clean, legible at all sizes
-  - **Display serif:** Fraunces or Newsreader — warm, slightly playful; used for section headings and tier names
-  - **Monospace:** JetBrains Mono or Geist Mono — code and level IDs
-  - Loaded via local `@fontsource/*` packages (no Google Fonts CDN — the app works offline)
-- **Color system — per-tier accent hue.** Each tier has a distinct color identity so the learner develops a spatial sense of where they are:
-  - Tier 0 Prelude → slate
-  - Tier 1 Math → indigo
-  - Tier 2 Classical ML → emerald
-  - Tier 3 GOFAI → amber
-  - Tier 4 Deep Learning → violet
-  - Tier 5 RL → rose
-  - Tier 6 LLMs → cyan
-  - Tier 7 Agentic AI → teal
-  - Tier 8 World Models → fuchsia
-- **Tier badges** — small rounded pills with tier-specific gradient + Lucide/Phosphor icon.
-- **Motion**:
+The app's theme, palette, and typography follow the author's personal site at <https://xavierloo.com>. Exact tokens (hex codes, font stack, spacing scale) are extracted from the site's CSS during M2 and committed to `platform/src/styles/tokens.css`. This section defines the **principles**; the precise values are an implementation detail.
+
+- **Palette philosophy — monochrome + one bright accent.**
+  - Base: near-black text on near-white background in light mode (the xavierloo.com default); inverted for dark mode.
+  - Accent: a single vibrant color (sampled from xavierloo.com — appears to be lime/neon or cyan) reserved for **state**, not decoration: in-progress level nodes, the "LIVE" dot, the XP increment flash, the currently-selected item.
+  - Tier differentiation is **typographic and structural** (weight, border treatment, whitespace), not chromatic. Each tier may take a *tint* of the accent or a grayscale weight, never a fully different hue family. This is deliberate — the source site's restraint is part of what we're matching.
+- **Typography stack** — extracted from xavierloo.com during M2:
+  - UI sans: whatever the source site uses (likely a system stack or Inter-adjacent)
+  - Monospace: whatever the source site uses (mono is a first-class element there — used for code-comment section headings, timestamps, technical markers)
+  - Display serif: **only** if the source site uses one; otherwise omitted (the earlier spec draft recommended Fraunces/Newsreader — replaced by whatever the site actually uses, which appears cleaner and more sans-dominant)
+  - Loaded via `@fontsource/*` packages where the site's fonts have open licenses; otherwise via the same system fallback the site uses.
+- **Signature pattern — code-comment section dividers** (adopted from xavierloo.com):
+  - Major sections of the app use markers styled as developer comments: `// foundations`, `// frontier`, `// luminaries`, `// glossary`, `// progress`
+  - Inside level panes: sub-section markers like `// objectives`, `// tasks`, `// lineage`, `// recall`, `// quiz`
+  - This is the app's strongest visual tie to the source site and becomes its authorial fingerprint.
+- **Motion:**
   - React 19 `<ViewTransition>` for graph and page transitions (direction-aware: forward/back)
-  - Framer Motion for accent animations (XP bar fill, achievement pop, level-card hover)
+  - Framer Motion for small accent animations (XP bar fill, achievement pop, level-card hover)
   - All under 300ms; `prefers-reduced-motion` fully honored
-- **Layout variety** (the "fun" without being gimmicky):
-  - Skill tree view = "world map" feeling (ample whitespace, pan/zoom, organic node placement by tier color)
-  - Level pane = "scroll" feeling (warm off-white / soft dark background, generous line-height, max-width ~72ch)
-  - `/luminaries` = portrait-card grid with era tabs
-  - `/glossary` = tight zebra-striped list with sticky A–Z jump bar
+  - No hero parallax, no scroll-jacking — matching the source site's calm tone.
+- **Layout:**
+  - Skill tree = "world map" feeling (ample whitespace, pan/zoom, node placement uses tier ordering rather than tier color)
+  - Level pane = readable long-form (generous line-height, max-width ~72ch, near-white / near-black background per theme)
+  - `/luminaries` = portrait-card grid with era tabs, but still monochrome with accent for "met/unmet" state
+  - `/glossary` = tight list with sticky A–Z jump bar; terms rendered in the monospace face to fit the source site's feel
+- **Dark mode:** xavierloo.com currently has no dark mode. Road to AI ships dark mode anyway (learners read at night), designed as a faithful inversion of the light theme rather than a separate palette.
 
 **Playfulness rules (the "reasonably" boundary):**
 
-- No confetti explosions on level-up — one gentle XP bump + a soft optional chime (default off, toggled in settings)
-- No cartoon mascots; clean iconography and subtle illustrative flourishes (e.g., a hand-drawn underline on section headings, soft gradient tier badges)
-- Dark mode is designed in parallel with light mode, not bolted on
-- Every tier transition feels a little different (slight color shift in the skill tree region, subtle typography weight change) — reinforces the sense of journey
+- Playfulness comes from **typographic wit** (the code-comment dividers, mono-set level IDs, deliberate copy tone) and **gentle motion**, not from cartoon illustrations, confetti, gradients, or mascots.
+- One soft optional chime on level-up (default off, toggled in Settings). No loud sound effects.
+- XP bump is a quiet pulse + number count-up; an achievement unlock gets a single accent flash on its badge, not a banner.
+- No tier-rainbow — the palette stays disciplined. If a learner wants to know which tier they're in, the typography and section markers tell them.
 
 **Authoring guidance (for curriculum authors):**
 
@@ -686,8 +687,9 @@ Four milestones; each ends with a push to `main` that triggers a GitHub Pages re
 - Root `README.md`, `LICENSE`, `LICENSE-CONTENT`, `CONTRIBUTING.md`, `.gitignore`
 - Vite + React 19 + TS + Tailwind v4 + pnpm scaffold under `platform/`
 - GitHub Actions workflow: lint, test, build, deploy to Pages
-- Placeholder landing page live at `https://jvloo.github.io/road-to-ai/`
-- **Deliverable:** a public URL that renders a "Road to AI" placeholder
+- **Extract design tokens from <https://xavierloo.com>** — fonts, palette (including the accent color), spacing scale — and commit to `platform/src/styles/tokens.css` + Tailwind theme config
+- Placeholder landing page live at `https://jvloo.github.io/road-to-ai/` using the extracted tokens, code-comment section dividers visible
+- **Deliverable:** a public URL that renders a "Road to AI" placeholder in the xavierloo.com visual idiom
 
 ### M2 — Level loader & skill tree (1–2 sessions)
 
@@ -717,13 +719,15 @@ Four milestones; each ends with a push to `main` that triggers a GitHub Pages re
 ### M4 — Flagship content + polish (1 session)
 
 - First 15 Track A levels authored end-to-end (of which ~5 carry luminary spotlights, and every level has ≥1 visual element per 6.H)
-- Per-tier accent colors applied in skill tree + tier badges
-- `<ViewTransition>` + Framer Motion accents wired on level-up, navigation, achievement pops
+- Code-comment section dividers applied consistently across skill tree, level pane, and sidebar
+- Tier differentiation via typographic treatment (not distinct hues) per 6.H — verified in both light and dark modes
+- `<ViewTransition>` + Framer Motion accents wired on level-up, navigation, achievement pops (all ≤300ms, reduced-motion honored)
 - Mobile-responsive refinements
-- Landing page with "Fork me and make your own curriculum" section
+- Landing page with "Fork me and make your own curriculum" section, styled in the xavierloo.com idiom
 - `CONTRIBUTING.md` describes how to add a curriculum of any subject, including luminary-spotlight and visual-authoring guidance
 - `CLAUDE.md` + all 7 slash commands authored
-- **Deliverable:** the learner can start Tier 0 today — and the app looks and feels inviting, not clinical
+- Side-by-side visual check against <https://xavierloo.com> — heading sizes, spacing scale, mono usage, accent treatment all feel consistent
+- **Deliverable:** the learner can start Tier 0 today — and the app feels like it belongs in the xavierloo.com family
 
 Total: ~5–7 focused Claude sessions (~10–20 working hours).
 
@@ -759,7 +763,8 @@ Total: ~5–7 focused Claude sessions (~10–20 working hours).
 - **Glossary chip noise.** If too many terms are chipped in a single level, the body becomes visually noisy. Mitigation: `glossary_terms` is opt-in per level (not automatic), and authoring rule recommends chipping only on first/key occurrences.
 - **Luminary photo licensing.** Reproducing photos is a copyright risk. Mitigation: photos are linked (not self-hosted) from Wikimedia Commons; if a figure has no free-use photo, the spotlight shows an initials avatar or a styled monogram instead.
 - **Bundle size creep.** Mermaid + KaTeX + Shiki + Framer Motion are all non-trivial dependencies. Mitigation: dynamic-import per-level-pane for Mermaid/KaTeX (only loaded when a level actually uses them); Shiki themes lazy-loaded; bundle budget tracked in CI.
-- **Visual-design bikeshedding.** Color palettes and font choices are infinitely tweakable. Mitigation: M2 ships with the defaults spec'd in 6.H; any changes require a one-line design-log entry in `docs/design-decisions.md` to avoid thrashing.
+- **Visual-design bikeshedding.** Color palettes and font choices are infinitely tweakable. Mitigation: palette and type are **sourced from xavierloo.com**, not invented in this repo; changes require a one-line design-log entry in `docs/design-decisions.md` to avoid thrashing. If the source site changes significantly, we re-extract rather than drift independently.
+- **Source site drift.** If xavierloo.com's design changes, the app can become stale relative to its source. Mitigation: the extracted tokens are versioned in `platform/src/styles/tokens.css` with a header comment noting the extraction date and source-site commit/snapshot. Periodic re-extraction can happen as a minor release.
 - **Recall fatigue.** Too many Recall Challenges will annoy the learner. Mitigation: cadence is "after ~5 completed levels on a track," not every 5 calendar days; all challenges are dismissible; no punishment for skipping.
 - **Translation API fragmentation.** The browser Translation API ships unevenly across browsers in 2026. Mitigation: external fallback is always present; user can opt into API key path; graceful degradation is designed in, not added later.
 - **Spec scope expansion.** This document has grown significantly during brainstorming (recall, translate, visuals, luminaries, glossary, footnotes all added after initial design). Mitigation: all of these are now M3/M4 scope; any *further* additions from here will go into a "v2 features" list rather than expanding M1–M4.
