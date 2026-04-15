@@ -1,9 +1,11 @@
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { HomePage } from "./pages/HomePage";
 import { LevelView } from "./pages/LevelView";
 import { LibraryPage } from "./pages/LibraryPage";
 import { RecallChallenge } from "./components/RecallChallenge";
 import { SelectionPopover } from "./components/SelectionPopover";
+import { AchievementToast } from "./components/AchievementToast";
 import { useStore } from "./store/useStore";
 
 function getHash(): string {
@@ -21,7 +23,10 @@ export default function App() {
   const challengeOpen = useStore((s) => s.challengeOpen);
   const progress = useStore((s) => s.progress);
   const dismissChallenge = useStore((s) => s.dismissChallenge);
+  const toasts = useStore((s) => s.toasts);
+  const dismissToast = useStore((s) => s.dismissToast);
   const [hash, setHash] = useState(getHash());
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     void load();
@@ -29,6 +34,28 @@ export default function App() {
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
   }, [load]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || target?.isContentEditable) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+      if (e.key === "Escape") {
+        if (getHash().startsWith("#/level/")) {
+          window.location.hash = "#/";
+          e.preventDefault();
+        }
+      } else if (e.key === "g") {
+        window.location.hash = "#/";
+      } else if (e.key === "l") {
+        window.location.hash = "#/library";
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const recentDone = levels
     .filter((l) => progress.levels[l.id]?.status === "done")
@@ -41,19 +68,38 @@ export default function App() {
 
   const levelId = parseLevelId(hash);
 
+  let routeKey: string;
   let content;
   if (levelId) {
+    routeKey = `level:${levelId}`;
     content = <LevelView levelId={levelId} />;
   } else if (hash.startsWith("#/library")) {
+    routeKey = "library";
     content = <LibraryPage />;
   } else {
+    routeKey = "home";
     content = <HomePage />;
   }
 
+  const transition = reduceMotion
+    ? { duration: 0 }
+    : { duration: 0.22, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] };
+
   return (
     <>
-      {content}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={routeKey}
+          initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={reduceMotion ? { opacity: 1 } : { opacity: 0, y: -8 }}
+          transition={transition}
+        >
+          {content}
+        </motion.div>
+      </AnimatePresence>
       {challengeOpen && <RecallChallenge recentDone={recentDone} onClose={dismissChallenge} />}
+      <AchievementToast queue={toasts} onDismiss={dismissToast} />
       <SelectionPopover />
     </>
   );

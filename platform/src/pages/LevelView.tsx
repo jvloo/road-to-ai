@@ -57,6 +57,24 @@ export function LevelView({ levelId }: LevelViewProps) {
     ? tierLevels[currentIndex + 1]
     : null;
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || target?.isContentEditable) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === "ArrowLeft" && prev) {
+        window.location.hash = `#/level/${(prev as { id: string }).id}`;
+        e.preventDefault();
+      } else if (e.key === "ArrowRight" && next) {
+        window.location.hash = `#/level/${(next as { id: string }).id}`;
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [prev, next]);
+
   const xp = progress.xp_total;
   const { curr: band } = bandForXp(xp);
 

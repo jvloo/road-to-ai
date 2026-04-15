@@ -25,6 +25,10 @@ export function Header({ xp, tier }: HeaderProps) {
           </a>
         </nav>
         <div className="flex items-center gap-3 font-mono text-xs">
+          <span className="hidden items-center gap-2 text-[var(--color-fg-faint)] md:flex">
+            <kbd className="rounded border border-[var(--color-border)] px-1.5 py-0.5 text-[10px]">g</kbd>
+            <kbd className="rounded border border-[var(--color-border)] px-1.5 py-0.5 text-[10px]">l</kbd>
+          </span>
           <span className="text-[var(--color-muted)]">{xp} XP</span>
           <span className="text-[var(--color-fg-faint)]">·</span>
           <span className="uppercase tracking-wide text-[var(--color-accent)]">{tier}</span>
