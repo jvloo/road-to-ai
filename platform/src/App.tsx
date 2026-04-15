@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { HomePage } from "./pages/HomePage";
 import { LevelPage } from "./pages/LevelPage";
 import { LuminariesIndex } from "./components/LuminariesIndex";
+import { Glossary } from "./components/Glossary";
 import { useStore } from "./store/useStore";
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
     return () => window.removeEventListener("hashchange", onHash);
   }, [load]);
 
+  if (hash === "#/glossary") return <Glossary />;
   if (hash === "#/luminaries") return <LuminariesIndex levels={levels} />;
 
   return (
