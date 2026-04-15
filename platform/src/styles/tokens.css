@@ -1,0 +1,66 @@
+/*
+ * Design tokens extracted from https://xavierloo.com on 2026-04-15.
+ * When the source site evolves, re-extract and update these values.
+ * Dark mode is the DEFAULT; light mode mirrors the source site exactly.
+ *
+ * Source CSS: /_next/static/css/8528e78edbdce99d.css
+ * Source variables:  --background, --foreground, --muted-foreground,
+ *                    --border, --card, --surface, --accent, --primary
+ * Source dark values live under `.dark { ... }`; light lives under `:root`.
+ */
+
+@theme {
+  /* ── DARK (default) — source `.dark { ... }` block ── */
+  --color-bg: #060610;              /* source --background */
+  --color-fg: #e4e4f0;              /* source --foreground */
+  --color-muted: #8888aa;           /* source --muted-foreground (expanded from #88a) */
+  --color-border: #18182a;          /* source --border */
+  --color-surface: #0c0c1a;         /* source --surface (card is #0a0a18; using --surface) */
+  --color-accent: #22d3ee;          /* source dark --accent (cyan-400) */
+  --color-accent-fg: #060610;       /* source --primary-foreground; dark bg reads on accent */
+
+  /* typography — xavierloo.com uses Geist / Geist Mono;
+     we fall back to Inter / JetBrains Mono (already bundled in the platform)
+     until the Geist font packages are added in a future task. */
+  --font-sans: "Inter", "Geist", "Geist Fallback", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "Geist Mono", "Geist Mono Fallback", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-display: var(--font-sans);
+
+  /* spacing scale (8px base assumed, standard) */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* radii — source site exposes --radius-md .375rem, --radius-lg .5rem, --radius-xl .75rem */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  /* shadows (used sparingly — xavierloo.com is mostly flat) */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+
+  /* motion — source site uses --default-transition-duration .15s and --ease-in-out cubic-bezier(.4,0,.2,1) */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 300ms;
+  --easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.light {
+  /* ── LIGHT — source `:root { ... }` block, copied exactly ── */
+  --color-bg: #f8f9fb;              /* source --background */
+  --color-fg: #0a0a0a;              /* source --foreground */
+  --color-muted: #64648a;           /* source --muted-foreground */
+  --color-border: #dfe0ea;          /* source --border */
+  --color-surface: #f0f1f7;         /* source --surface (card is #fff) */
+  --color-accent-fg: #ffffff;       /* source --primary-foreground in light */
+  /* Note: source site's light --accent is #06b6d4 (cyan-500). We intentionally
+     keep a single accent across themes (dark's #22d3ee) per spec §6.H. */
+}
