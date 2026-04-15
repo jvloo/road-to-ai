@@ -4,7 +4,7 @@ import { AppShell } from "@/components/AppShell";
 import { Landing } from "@/components/Landing";
 import { ContinueCard } from "@/components/ContinueCard";
 import { ProgressStrip } from "@/components/ProgressStrip";
-import { SkillTree } from "@/components/SkillTree";
+import { Trail } from "@/components/trail/Trail";
 import { Divider } from "@/components/Divider";
 
 export function HomePage() {
@@ -68,7 +68,7 @@ export function HomePage() {
       )}
 
       <Divider>the road ahead</Divider>
-      <SkillTree levels={levels} onSelect={select} />
+      <Trail levels={levels} onSelect={select} />
 
       <footer className="mt-16 font-mono text-xs text-[var(--color-fg-faint)]">
         // fork me:{" "}

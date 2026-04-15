@@ -3,15 +3,15 @@
   "name": "Road to AI",
   "description": "A cold-start-friendly path from math foundations to world models.",
   "tiers": [
-    { "id": 0, "name": "Prelude",            "accent": "slate" },
-    { "id": 1, "name": "Math Foundations",   "accent": "indigo" },
-    { "id": 2, "name": "Classical ML",       "accent": "emerald" },
-    { "id": 3, "name": "Symbolic AI",        "accent": "amber" },
-    { "id": 4, "name": "Deep Learning",      "accent": "violet" },
-    { "id": 5, "name": "Reinforcement Learning", "accent": "rose" },
-    { "id": 6, "name": "LLMs",               "accent": "cyan" },
-    { "id": 7, "name": "Agentic AI",         "accent": "teal" },
-    { "id": 8, "name": "World Models",       "accent": "fuchsia" }
+    { "id": 0, "name": "Prelude",            "accent": "slate",    "blurb": "How this curriculum works. The first steps before real material — environment, mindset, how to read a paper." },
+    { "id": 1, "name": "Math Foundations",   "accent": "indigo",   "blurb": "Linear algebra, calculus, and the intuition for gradient descent. The vocabulary every modern ML method inherits from." },
+    { "id": 2, "name": "Classical ML",       "accent": "emerald",  "blurb": "Probability, statistics, and the pre-deep-learning canon — linear models, trees, kernels, the bias-variance story." },
+    { "id": 3, "name": "Symbolic AI",        "accent": "amber",    "blurb": "GOFAI lineage: logic, search, planning, expert systems. Classical roots that modern agents are rediscovering." },
+    { "id": 4, "name": "Deep Learning",      "accent": "violet",   "blurb": "Neural nets, backprop, convolutions, transformers. The architecture-first era that ate the world after 2012." },
+    { "id": 5, "name": "Reinforcement Learning", "accent": "rose", "blurb": "From bandits and MDPs to modern policy gradient. The thread woven through every agent." },
+    { "id": 6, "name": "LLMs",               "accent": "cyan",     "blurb": "Language models from n-grams to trillion-parameter transformers. Pretraining, scaling laws, alignment." },
+    { "id": 7, "name": "Agentic AI",         "accent": "teal",     "blurb": "Tool use, planning, memory, multi-agent orchestration. The reunion of symbolic and learned reasoning." },
+    { "id": 8, "name": "World Models",       "accent": "fuchsia",  "blurb": "Learning a model of reality itself. The frontier — and where this road leads." }
   ],
   "tier_bands": [
     { "name": "Novice",       "min_xp": 0 },
