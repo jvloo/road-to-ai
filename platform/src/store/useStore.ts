@@ -3,15 +3,18 @@ import type { Level } from "@/lib/types";
 import { loadCurriculum } from "@/lib/curriculum";
 import { loadProgress, markLevelDone, saveProgress, type Progress } from "@/lib/progress";
 import { checkAchievements } from "@/lib/achievements";
+import { shouldShowChallenge } from "@/lib/recall";
 
 interface StoreState {
   levels: Level[];
   loaded: boolean;
   selectedId: string | null;
   progress: Progress;
+  challengeOpen: boolean;
   load: () => Promise<void>;
   select: (id: string | null) => void;
   markDone: (id: string) => void;
+  dismissChallenge: () => void;
 }
 
 export const useStore = create<StoreState>((set, get) => ({
@@ -19,6 +22,7 @@ export const useStore = create<StoreState>((set, get) => ({
   loaded: false,
   selectedId: null,
   progress: loadProgress(),
+  challengeOpen: false,
   async load() {
     if (get().loaded) return;
     const rawLevels = await loadCurriculum();
@@ -43,6 +47,8 @@ export const useStore = create<StoreState>((set, get) => ({
       progress = { ...progress, achievements: [...progress.achievements, ...newAwards] };
     }
     saveProgress(progress);
-    set({ progress, levels });
+    const challengeOpen = shouldShowChallenge(progress);
+    set({ progress, levels, challengeOpen });
   },
+  dismissChallenge() { set({ challengeOpen: false }); },
 }));

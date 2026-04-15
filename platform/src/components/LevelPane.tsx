@@ -3,6 +3,10 @@ import type { Level } from "@/lib/types";
 import { renderMarkdown } from "@/lib/markdown";
 import { Divider } from "./Divider";
 import { LuminarySpotlight } from "./LuminarySpotlight";
+import { RecallHeader } from "./RecallHeader";
+import { LevelQuiz } from "./LevelQuiz";
+import { useStore } from "@/store/useStore";
+import { pickRecallLevels } from "@/lib/recall";
 
 export interface LevelPaneProps {
   level: Level;
@@ -11,15 +15,14 @@ export interface LevelPaneProps {
 
 export function LevelPane({ level, onMarkDone }: LevelPaneProps) {
   const [html, setHtml] = useState<string>("");
+  const allLevels = useStore((s) => s.levels);
+  const progress = useStore((s) => s.progress);
+  const recall = pickRecallLevels(level, allLevels, progress);
 
   useEffect(() => {
     let cancelled = false;
-    renderMarkdown(level.body).then((h) => {
-      if (!cancelled) setHtml(h);
-    });
-    return () => {
-      cancelled = true;
-    };
+    renderMarkdown(level.body).then((h) => { if (!cancelled) setHtml(h); });
+    return () => { cancelled = true; };
   }, [level.body]);
 
   return (
@@ -36,19 +39,22 @@ export function LevelPane({ level, onMarkDone }: LevelPaneProps) {
       </p>
 
       {level.luminary && <LuminarySpotlight name={level.luminary} />}
+      <RecallHeader levels={recall} />
 
       <Divider>content</Divider>
       <div
-        className="prose prose-invert max-w-none prose-headings:font-semibold"
+        className="prose prose-invert max-w-none"
         dangerouslySetInnerHTML={{ __html: html }}
       />
+
+      {level.quiz && level.quiz.length > 0 && <LevelQuiz questions={level.quiz} />}
 
       {level.status !== "done" && (
         <>
           <Divider>action</Divider>
           <button
             onClick={() => onMarkDone(level.id)}
-            className="rounded border border-[var(--color-accent)] bg-[var(--color-accent)] px-4 py-2 font-mono text-sm text-[var(--color-accent-fg)] transition hover:opacity-90"
+            className="rounded border border-[var(--color-accent)] bg-[var(--color-accent)] px-4 py-2 font-mono text-sm text-[var(--color-accent-fg)] hover:opacity-90"
           >
             Mark done · +{level.xp} XP
           </button>
