@@ -6,6 +6,29 @@ follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [platform-v0.3.0] — 2026-04-15
+
+### Added
+- First 15 Tier-1 Math Foundations levels authored end-to-end (F00–F14)
+  - F00 Welcome · F01 Dev Environment · F02 How to Read a Paper (Keshav)
+  - F03 Python Numerical Stack (Oliphant) · F04 Vectors (Grassmann)
+  - F05 Matrices · F06 Dot Products (Hamilton) · F07 Linear Independence
+  - F08 Linear Systems (Gauss) · F09 Eigenvalues · F10 Limits (Weierstrass)
+  - F11 Derivatives (Leibniz) · F12 Gradients · F13 Loss Surfaces
+  - F14 Gradient Descent (Cauchy) — flagship exemplar with Python code + quiz
+- Glossary seeded with 10 entries (XP, SGD, learning-rate, loss-surface, etc.)
+- Root `CLAUDE.md` + 7 slash commands (`/status`, `/lesson`, `/level-up`,
+  `/paper-week`, `/review`, `/tree`, `/new-level`)
+- Mobile-responsive SkillTree height, hero typography, and LevelPage modal
+- First-time onboarding block on HomePage when xp_total === 0
+- Root `README.md` preview section + docs/screenshots/ directory
+
+### Fixed
+- Glossary body now renders markdown (**bold** resolves correctly)
+
+### Changed
+- HomePage displays a highlighted "Start with F00" affordance for brand-new learners
+
 ## [platform-v0.2.0] — 2026-04-15
 
 ### Added

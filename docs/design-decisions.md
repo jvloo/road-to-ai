@@ -84,3 +84,16 @@ Source CSS literally defines two palette scopes: `:root { ... }` (light) and
    properties (Tailwind v4 resolves those at compile time from utility
    classes). We used the spec-provided defaults (8px base, two shadow
    levels) rather than inferring from per-element styles.
+
+## Visual parity audit — 2026-04-15
+
+Compared the app's dark-mode rendering at `/road-to-ai/` against
+https://xavierloo.com:
+
+- **Palette:** monochrome base with cyan `#22d3ee` accent matches the source site's LIVE-badge accent.
+- **Typography:** body uses Inter (close analog to the source site's Geist); code uses JetBrains Mono (site uses Geist Mono). Noted in an earlier log as intentional — install Geist in a future task if we want exact parity.
+- **Code-comment dividers** (`// foundations`, `// progress`, etc.) match the source site's `// work` / `// projects` idiom exactly.
+- **Spacing:** generous whitespace preserved; max-width constraints match.
+- **Dark mode:** default on first load; light mode available via Settings.
+
+No regressions flagged against the source site's current visual design.
