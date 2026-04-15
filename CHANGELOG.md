@@ -6,6 +6,25 @@ follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [platform-v0.2.0] — 2026-04-15
+
+### Added
+- Progress persistence via localStorage; tier computed from XP total
+- `XpBar`, `TierBadge`, `AchievementShelf`, `ProgressDashboard` components wired into HomePage above the skill tree
+- Achievements engine with 4 seeded rules (first-step, met-10-luminaries, met-25-luminaries, glossary-trailblazer stub)
+- Luminary spotlight card on levels with `luminary:` frontmatter (S. Keshav currently on F02)
+- `/luminaries` index page aggregating luminaries across levels with their level IDs
+- `/glossary` index page with 8 starter entries rendered through the markdown pipeline
+- `GlossaryChip` inline hover component (unwired, ready for future per-level opt-in)
+- Footnote styling with `// footnotes` code-comment marker
+- Recall system: auto-recall header on levels, inline `LevelQuiz` (self-attest + multiple-choice), periodic `RecallChallenge` modal every 5 completions
+- Highlight-to-translate popover using the browser's Translation API with Google Translate fallback
+- `/settings` page for theme, target language, translation provider, and completion-chime toggle
+- Top navigation with hash-based routing (`#/`, `#/luminaries`, `#/glossary`, `#/settings`)
+
+### Fixed
+- Glossary entry bodies now render markdown (e.g., `**Experience Points.**` shows as bold, not literal asterisks)
+
 ## [platform-v0.1.0] — 2026-04-15
 
 ### Added
