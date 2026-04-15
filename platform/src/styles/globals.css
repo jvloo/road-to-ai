@@ -16,8 +16,13 @@
   body {
     font-family: var(--font-sans);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-    background: var(--color-bg);
     color: var(--color-fg);
+    background-color: var(--color-bg);
+    /* subtle 1px dotted grid grain at ~3% opacity — prevents the flat-void feeling */
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(136, 136, 170, 0.06) 1px, transparent 0);
+    background-size: 32px 32px;
+    background-attachment: fixed;
   }
 
   code, kbd, samp, pre {

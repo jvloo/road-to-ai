@@ -13,11 +13,37 @@
   /* ── DARK (default) — source `.dark { ... }` block ── */
   --color-bg: #060610;              /* source --background */
   --color-fg: #e4e4f0;              /* source --foreground */
-  --color-muted: #8888aa;           /* source --muted-foreground (expanded from #88a) */
+  --color-muted: #8888aa;           /* source --muted-foreground */
   --color-border: #18182a;          /* source --border */
-  --color-surface: #0c0c1a;         /* source --surface (card is #0a0a18; using --surface) */
+  --color-surface: #0c0c1a;         /* source --surface */
   --color-accent: #22d3ee;          /* source dark --accent (cyan-400) */
-  --color-accent-fg: #060610;       /* source --primary-foreground; dark bg reads on accent */
+  --color-accent-fg: #060610;       /* source --primary-foreground */
+
+  /* v2 — elevation scale, each ~2-3% lighter than the last */
+  --color-surface-0: #060610;       /* page bg */
+  --color-surface-1: #0c0c1a;       /* cards */
+  --color-surface-2: #14142a;       /* hover */
+  --color-surface-3: #1c1c3a;       /* active */
+
+  /* v2 — fg hierarchy */
+  --color-fg-strong: #ffffff;       /* display type */
+  --color-fg-muted: #8888aa;        /* meta */
+  --color-fg-faint: #4a4a6a;        /* locked, disabled */
+
+  /* v2 — accent alphas for glows */
+  --color-accent-glow: rgba(34, 211, 238, 0.18);
+  --color-accent-glow-strong: rgba(34, 211, 238, 0.35);
+
+  /* v2 — elevation shadows */
+  --shadow-card: 0 1px 0 0 rgba(255, 255, 255, 0.03) inset, 0 12px 32px -16px rgba(0, 0, 0, 0.6);
+  --shadow-accent: 0 0 24px var(--color-accent-glow);
+
+  /* v2 — typography scale */
+  --text-display: clamp(2.5rem, 5vw, 4.5rem);
+  --text-title: 2rem;
+  --text-section: 1.125rem;
+  --text-body: 1rem;
+  --text-meta: 0.75rem;
 
   /* typography — xavierloo.com uses Geist / Geist Mono;
      we fall back to Inter / JetBrains Mono (already bundled in the platform)
