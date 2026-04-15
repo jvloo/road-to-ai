@@ -414,7 +414,7 @@ The app's theme, palette, and typography follow the author's personal site at <h
   - Level pane = readable long-form (generous line-height, max-width ~72ch, near-white / near-black background per theme)
   - `/luminaries` = portrait-card grid with era tabs, but still monochrome with accent for "met/unmet" state
   - `/glossary` = tight list with sticky A–Z jump bar; terms rendered in the monospace face to fit the source site's feel
-- **Dark mode:** xavierloo.com currently has no dark mode. Road to AI ships dark mode anyway (learners read at night), designed as a faithful inversion of the light theme rather than a separate palette.
+- **Theme default: dark mode.** Software engineers strongly prefer dark interfaces; Road to AI defaults to dark on first load and falls back to the user's OS `prefers-color-scheme` only if explicitly set. Light mode is available in Settings and follows xavierloo.com's current light palette exactly. Dark mode is a first-class inversion designed in parallel — not a bolted-on secondary theme.
 
 **Playfulness rules (the "reasonably" boundary):**
 
@@ -494,7 +494,7 @@ Cold-start learners sometimes need to translate a passage to their native langua
 - Preferred translation language (dropdown, ~20 common options + custom)
 - Translation provider preference (Auto / Browser-only / External link / API key)
 - API key field (optional; obfuscated input; `localStorage` only)
-- Theme (light / dark / system)
+- Theme (dark [default] / light / system)
 - Sound toggle (default off; see 6.H)
 - Reduced motion (inherits OS default; can override)
 - Font stack switcher (e.g., dyslexia-friendly mode)
