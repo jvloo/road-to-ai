@@ -1,7 +1,7 @@
 # Road to AI — Curriculum & Platform Design
 
 **Status:** Draft for review
-**Author:** Xavier Loo (<https://xavierloo.com>)
+**Author:** Xavier Loo (<ping@xavierloo.com>)
 **Design date:** 2026-04-15
 **Repository:** `jvloo/road-to-ai` (public, monorepo)
 **Licenses:** MIT (code) + CC-BY-SA 4.0 (curriculum content)
@@ -164,6 +164,16 @@ status: pending                # pending | in-progress | done  (authored as pend
 completed_at: null             # ISO date when marked done; null until then
 tags: [optimization, calculus] # free-form for search/filter
 achievements: []               # achievement IDs triggered on completion
+luminary: "Augustin-Louis Cauchy"  # optional; null if no spotlight for this level
+glossary_terms: [SGD, loss-surface, learning-rate]   # auto-linked terms from curriculum/glossary.md
+recall_of: [F10, F12, F13]         # optional; overrides auto-pick for the recall header
+quiz:                               # optional inline recall quiz rendered at end of level
+  - q: "What happens if the learning rate is too high?"
+    type: self-attest
+  - q: "Which optimizer introduces per-parameter adaptive rates?"
+    type: multiple-choice
+    choices: [SGD, Adam, Momentum, RMSProp]
+    answer: 1
 ---
 
 ## Why this level matters (lineage)
@@ -197,6 +207,10 @@ All three tasks checked. You can explain (aloud, to yourself, without notes) why
 ## Bridge to modern
 
 Once done, **P04 (Kingma & Ba — Adam)** becomes readable. Adam's entire innovation — per-parameter adaptive learning rates — is a direct extension of the step-size geometry you just built intuition for.
+
+## Luminary spotlight — Augustin-Louis Cauchy (1789–1857)
+
+French mathematician who in 1847 published the method of steepest descent, the direct ancestor of every optimizer you will ever use. Cauchy invented it to solve astronomical orbit equations — the problem that set him up to also formalize modern rigorous calculus (ε-δ limits) and complex analysis. The entire Deep Learning stack rests on machinery he built two centuries before there was anything to optimize. *Worth remembering:* he published over 800 papers, more than anyone else in the 19th century.
 ```
 
 **Authoring rules:**
@@ -204,6 +218,11 @@ Once done, **P04 (Kingma & Ba — Adam)** becomes readable. Adam's entire innova
 - Every level must include a **"Why this level matters (lineage)"** section naming at least one classical root and at least one modern descendant (or vice versa for Track B).
 - `xp` is honest effort estimate in hours; the platform assumes 1 XP = 1 hour of focused work.
 - `prereqs` and `unlocks` should be kept consistent (if A lists B as a prereq, B should list A in unlocks).
+- `luminary` is optional. When set, the level body must include a **"Luminary spotlight"** section of 3–5 sentences (see Section 6.F for format).
+- `glossary_terms` is optional. When set, every mention of a listed term in the body becomes a hoverable chip linked to the global glossary (see Section 6.G).
+- Lesson-specific clarifications use inline markdown footnotes (`[^1]`) rather than glossary entries (see Section 6.G).
+- `recall_of` is optional; if omitted, the platform auto-selects 3 recently-completed levels for the recall header (see Section 6.I).
+- `quiz` is optional; when present, it renders an inline recall quiz at the bottom of the level pane (see Section 6.I).
 
 ### 6.D — Tier & branch roadmap
 
@@ -244,6 +263,248 @@ Every level file must honor the **"lineage"** thread — a mandatory section tha
 
 This is not decorative. It is the primary pedagogical mechanism.
 
+### 6.F — Luminary Spotlights
+
+Some lessons (not all) introduce a **luminary** — a researcher, mathematician, pioneer, or thinker whose work is central to that lesson. Mixing classical pioneers (Turing, Shannon, Cauchy, McCarthy, Minsky, Pearl, Boltzmann) with modern torchbearers (Hinton, LeCun, Bengio, Sutton, Schmidhuber, Karpathy, Hassabis, Sutskever, Silver, Goodfellow, Kingma, Chollet, Ng, Fei-Fei Li) gives the curriculum a human spine alongside its conceptual one.
+
+**Why this feature matters:**
+
+- Ideas are remembered better when tied to a person with a story.
+- A lot of "lineage" in AI is literally **teacher→student chains** — Hinton trained Sutskever; Sutton trained Silver; LeCun trained Bengio's collaborators. Surfacing these chains makes the research world feel connected rather than random.
+- Reading papers is easier once you recognize author names and know what each person tends to work on. Building this recognition early compounds for years.
+
+**Mechanics:**
+
+- Optional per level; target frequency is ~1 in 3 levels (no quota enforced — some levels don't have an obvious primary figure).
+- Controlled by the `luminary: <name> | null` frontmatter field on the level file.
+- When set, the level body includes a **"Luminary spotlight"** section of 3–5 sentences covering:
+  1. Who they are / were (with life dates)
+  2. The specific contribution relevant to this lesson
+  3. One iconic work, paper, or moment
+  4. A human detail worth remembering (famous quote, career turn, surprising affiliation, known controversy)
+- The same luminary may recur across multiple levels when their work spans tiers (e.g., Hinton appears in backprop, Boltzmann machines, capsule networks, and distillation).
+
+**Selection rules (to avoid hagiography):**
+
+- Prefer the person most directly tied to the lesson's central idea, not just the most famous name in the area.
+- Mix eras. Don't skew to only 20th-century pioneers or only 2020s researchers.
+- When multiple people co-discovered something (e.g., backprop: Rumelhart, Hinton, Williams — but also Linnainmaa, Werbos), name the most-cited and note the shared discovery honestly.
+- Acknowledge controversies or failures briefly where they shaped the field (Minsky's 1969 *Perceptrons* critique delaying neural nets; the 1980s expert-systems bubble; ongoing safety debates).
+- Do not reproduce copyrighted photos. Link to Wikimedia Commons or the researcher's personal/institutional page for imagery; render captions locally.
+
+**Platform rendering:**
+
+- `LuminarySpotlight.tsx` component displays a small card within `LevelPane` when `luminary` is non-null.
+- A dedicated **Luminaries index page** (`/luminaries`) aggregates all spotlights so learners can browse by era, field, or alphabetically — and see how often each figure recurs across the curriculum.
+- Click a luminary on one level → see every other level they appear in.
+
+**Spotlight-triggered achievements** (examples, finalized in M3):
+
+- `met-10-luminaries` — "You've been introduced to 10 researchers."
+- `met-25-luminaries` — "25 faces, 25 stories."
+- `turing-award-trio` — Met Hinton, LeCun, and Bengio (2018 Turing Award co-recipients).
+- `classical-hall` — Met 10 pre-1990 pioneers.
+- `modern-torchbearers` — Met 10 post-2010 researchers.
+- `teacher-student-chain` — Met at least one full teacher→student chain (e.g., Hinton → Sutskever, or Sutton → Silver).
+
+### 6.G — Glossary & Footnotes
+
+Cold-start learners meet a lot of jargon. The curriculum provides three complementary tools so that a term can be learned in-context without derailing the reading flow.
+
+**Tool 1 — Global glossary** (`curriculum/glossary.md`)
+
+Single-file glossary where each `##` heading is a term (an acronym, jargon phrase, or concept). Shared across every level. Entries are short: 1–3 sentences plus optional "see also" links to other glossary terms and level IDs.
+
+Example entry:
+
+```markdown
+## RLHF
+
+**Reinforcement Learning from Human Feedback.** A post-training technique that uses human preference data to shape a language model's behavior after pretraining. Introduced at scale by OpenAI (InstructGPT, 2022); now commonly replaced or complemented by DPO and GRPO.
+
+*See also:* [DPO], [GRPO], [F98-post-training], [P18-InstructGPT].
+```
+
+**Tool 2 — Per-level glossary opt-in** (frontmatter `glossary_terms`)
+
+The level's frontmatter declares which glossary terms are used in the body. The platform auto-wraps every mention in the rendered body with a hoverable chip linked to the global glossary. Hovering shows the definition in a tooltip; clicking opens the full entry in a slide-over panel.
+
+This is opt-in per level (not automatic full-text scan) so authors control where chips appear — otherwise a glossary-heavy level would become a wall of blue underlines.
+
+**Tool 3 — Inline footnotes** (standard markdown footnotes)
+
+For lesson-specific clarifications and caveats that don't generalize — a one-off historical note, a warning, a linked resource. Uses GitHub-flavored markdown footnote syntax (`[^1]`), rendered as superscript in-line and listed at the bottom of the level pane.
+
+Example:
+
+```markdown
+Adam's default β₂ is 0.999[^1], which means the second-moment estimate
+effectively averages over ~1000 steps.
+
+[^1]: This default comes from Kingma & Ba 2014; some recent work argues
+      β₂ = 0.95 is better for LLM training. See Chinchilla footnote 3.
+```
+
+**When to use which:**
+
+| Situation | Tool |
+|---|---|
+| Recurring acronym or jargon | Global glossary + `glossary_terms` |
+| One-off clarification, caveat, or aside | Inline footnote |
+| Named person | Luminary spotlight (6.F) |
+| Classical ↔ modern conceptual link | Lineage section (6.E) |
+
+**Authoring rules:**
+
+- Glossary entries stay short (3 sentences max). Depth belongs in levels.
+- "See also" links use `[term]` for other glossary entries and `[Lxx-slug]` for level references.
+- Footnotes should be rare — more than 3 per level usually means those items want to be glossary entries instead.
+- Every glossary term must list the first level where a learner is expected to meet it (the "first-seen" level), to help pacing reviews.
+
+**Platform rendering:**
+
+- `Glossary.tsx` — renders `/glossary` as a searchable, alphabetical, filter-by-tier page.
+- `GlossaryChip.tsx` — inline hoverable chip used inside `LevelPane`.
+- `FootnoteList.tsx` — renders footnote list at the bottom of a level; scroll-syncs with inline superscripts.
+- A term's glossary page shows every level it appears in (reverse index) so learners can jump to an earlier context.
+
+**Glossary-related achievements:**
+
+- `glossary-trailblazer` — encountered 25 glossary terms in context
+- `footnote-spelunker` — opened 50 footnotes (fun counter, no real gate)
+
+### 6.H — Visual & Interaction Design
+
+Text-heavy learning material burns out cold-start learners fast. Both the platform and the curriculum treat **visual variety and gentle playfulness** as first-class features — not decoration added at the end.
+
+**Content-level visuals (authored directly in level markdown):**
+
+| Feature | Tool | Use case |
+|---|---|---|
+| Diagrams | **Mermaid** (flow, sequence, state, class, gantt) | Architecture, algorithms, training loops |
+| Math | **KaTeX** (inline `$...$` and block `$$...$$`) | Every non-trivial derivation |
+| Static images | PNG/SVG under `curriculum/assets/<level-id>/` | Handwritten diagrams, matplotlib output |
+| Code highlighting | **Shiki** with VS Code themes (light + dark) | All code blocks |
+| Interactive widgets | Iframed React islands (optional, lesson-specific) | e.g., a gradient descent visualizer for F14 — ship when the lesson *really* benefits |
+
+**Platform-level visual identity:**
+
+- **Typography stack** — layered, not monolithic:
+  - **UI sans:** Inter or Geist — clean, legible at all sizes
+  - **Display serif:** Fraunces or Newsreader — warm, slightly playful; used for section headings and tier names
+  - **Monospace:** JetBrains Mono or Geist Mono — code and level IDs
+  - Loaded via local `@fontsource/*` packages (no Google Fonts CDN — the app works offline)
+- **Color system — per-tier accent hue.** Each tier has a distinct color identity so the learner develops a spatial sense of where they are:
+  - Tier 0 Prelude → slate
+  - Tier 1 Math → indigo
+  - Tier 2 Classical ML → emerald
+  - Tier 3 GOFAI → amber
+  - Tier 4 Deep Learning → violet
+  - Tier 5 RL → rose
+  - Tier 6 LLMs → cyan
+  - Tier 7 Agentic AI → teal
+  - Tier 8 World Models → fuchsia
+- **Tier badges** — small rounded pills with tier-specific gradient + Lucide/Phosphor icon.
+- **Motion**:
+  - React 19 `<ViewTransition>` for graph and page transitions (direction-aware: forward/back)
+  - Framer Motion for accent animations (XP bar fill, achievement pop, level-card hover)
+  - All under 300ms; `prefers-reduced-motion` fully honored
+- **Layout variety** (the "fun" without being gimmicky):
+  - Skill tree view = "world map" feeling (ample whitespace, pan/zoom, organic node placement by tier color)
+  - Level pane = "scroll" feeling (warm off-white / soft dark background, generous line-height, max-width ~72ch)
+  - `/luminaries` = portrait-card grid with era tabs
+  - `/glossary` = tight zebra-striped list with sticky A–Z jump bar
+
+**Playfulness rules (the "reasonably" boundary):**
+
+- No confetti explosions on level-up — one gentle XP bump + a soft optional chime (default off, toggled in settings)
+- No cartoon mascots; clean iconography and subtle illustrative flourishes (e.g., a hand-drawn underline on section headings, soft gradient tier badges)
+- Dark mode is designed in parallel with light mode, not bolted on
+- Every tier transition feels a little different (slight color shift in the skill tree region, subtle typography weight change) — reinforces the sense of journey
+
+**Authoring guidance (for curriculum authors):**
+
+- A level without at least one diagram, equation, image, or code block is probably too abstract for a cold-start learner. Aim for **≥1 visual element per level**, ideally 2–3.
+- Diagrams beat walls of prose. For anything sequential or spatial, write a Mermaid diagram first and write prose to fill the gaps.
+- Every boss-level deliverable should itself produce a visual artifact (plot, diagram, animation) — this keeps the proof-of-learning tangible.
+
+**Accessibility (non-negotiable):**
+
+- All interactive elements keyboard-navigable
+- Tier colors pass WCAG AA contrast in both light and dark modes
+- KaTeX emits MathML fallback for screen readers
+- `prefers-reduced-motion` honored on every animation path
+- Skill tree has a keyboard-navigable list-view fallback for users who find graph interaction hard
+
+### 6.I — Recall & Spaced Reinforcement
+
+Learning without recall leaks. Three reinforcement tools work alongside the existing `/review` slash command to keep prior material fresh:
+
+**Tool 1 — Auto-recall header (passive).**
+Every level pane shows a small "Previously on your path…" strip above the main content with 3 bullets auto-generated from the 3 most recently completed levels' *done criteria*. It's passive (you read it without acting) but it nudges the ideas back into working memory before the new lesson starts. Authors can override the auto-pick with a `recall_of: [F10, F12, F13]` frontmatter field when specific previous levels are more relevant than the most-recent-three.
+
+**Tool 2 — Recall Challenges (periodic).**
+After every ~5 completed levels on a track, the platform inserts a **Recall Challenge** card — 3–5 questions drawn from recent levels' done criteria and quiz fields. Optional and dismissible; if attempted, awards a small XP reward (spaced reinforcement is its own reward — we don't over-incentivize this).
+
+**Tool 3 — Level-authored quiz (lesson-specific).**
+Levels may include an optional `quiz:` frontmatter field with 2–4 questions. Three question types are supported:
+
+| Type | Use for | Grading |
+|---|---|---|
+| `self-attest` | "Can you explain X?" conceptual checks | Learner clicks yes/no; honest self-grade |
+| `multiple-choice` | Discrete answer with unambiguous options | Platform-graded |
+| `free-text` | Short reflective answers | Learner self-grades after revealing a model answer |
+
+Rendered at the bottom of the level pane above the "Mark as done" action. No quiz blocks the `done` transition — even if the learner skips it, they can still mark the level complete (all grading is honor-system by design).
+
+**Frequency summary:**
+
+| Mechanic | Frequency | Interaction |
+|---|---|---|
+| Auto-recall header | Every level | Passive |
+| Level quiz | When authored | Optional, inline |
+| Recall Challenge | Every ~5 levels | Optional, modal card |
+| `/review` slash command | On-demand | Active, via Claude |
+
+**Recall-related achievements:**
+
+- `recall-champion` — completed 10 Recall Challenges
+- `no-shortcuts` — completed the inline quiz on 25 levels
+- `memory-palace` — completed every Recall Challenge for one full tier
+
+### 6.J — Highlight & Translate
+
+Cold-start learners sometimes need to translate a passage to their native language to fully absorb nuance. The platform supports in-place translation without sending text off-device by default.
+
+**Mechanics:**
+
+- Select any text in a level pane → a floating popover (`SelectionPopover.tsx`) appears with four actions: **Translate**, **Copy**, **Save as note**, **Dismiss**.
+- Translation target language is set in Settings (defaults to `navigator.language`, so "zh-CN", "ja", "es", etc.).
+- The popover also exposes a **Save as note** action that drops the selection into `notes/<level-id>.md` with a timestamp and backlink — useful for building personal study notes without leaving the reader.
+
+**Translation provider chain (priority order):**
+
+1. **Browser Translation API** *(primary)* — Chrome 131+, Edge, Safari 18+. On-device, free, private. No text leaves the user's machine. Used automatically when available.
+2. **External fallback** — a one-click link that opens Google Translate with the selected text pre-filled in the URL (opens a new tab). No API key; no egress from our app itself.
+3. **Optional power user path** — user supplies a DeepL or OpenAI API key in Settings for higher-quality in-line translation with no tab-switching. Stored in `localStorage`, never committed.
+
+**Settings page (`Settings.tsx`, new) — consolidates all user preferences:**
+
+- Preferred translation language (dropdown, ~20 common options + custom)
+- Translation provider preference (Auto / Browser-only / External link / API key)
+- API key field (optional; obfuscated input; `localStorage` only)
+- Theme (light / dark / system)
+- Sound toggle (default off; see 6.H)
+- Reduced motion (inherits OS default; can override)
+- Font stack switcher (e.g., dyslexia-friendly mode)
+
+**Privacy guarantees:**
+
+- On-device translation is the default path when the browser supports it.
+- External fallback requires an explicit user click (it's a link, not an automatic request).
+- No user text is sent to any server by the platform itself — user-initiated external links are the only egress path unless the user configures an API key.
+- `CLAUDE.md` prohibits Claude sessions from silently translating highlighted text; it must be invoked explicitly.
+
 ## 7. Platform design
 
 ### 7.A — Repository layout
@@ -277,14 +538,27 @@ road-to-ai/                           # monorepo root (public)
 │   │   ├── components/
 │   │   │   ├── SkillTree.tsx         # Cytoscape wrapper
 │   │   │   ├── LevelPane.tsx         # renders a level markdown with remark
+│   │   │   ├── LuminarySpotlight.tsx # renders the luminary card inside LevelPane
+│   │   │   ├── LuminariesIndex.tsx   # aggregated /luminaries page
+│   │   │   ├── Glossary.tsx          # /glossary page (searchable, alphabetical)
+│   │   │   ├── GlossaryChip.tsx      # inline hoverable chip with tooltip+slide-over
+│   │   │   ├── FootnoteList.tsx      # rendered at bottom of LevelPane, scroll-synced
+│   │   │   ├── RecallHeader.tsx      # auto-recall strip at top of LevelPane
+│   │   │   ├── RecallChallenge.tsx   # modal card every ~5 levels
+│   │   │   ├── LevelQuiz.tsx         # inline quiz at bottom of LevelPane
+│   │   │   ├── SelectionPopover.tsx  # floating translate/copy/save-note popover
+│   │   │   ├── Settings.tsx          # settings page (translation, theme, motion, fonts)
 │   │   │   ├── XpBar.tsx
 │   │   │   ├── TierBadge.tsx
 │   │   │   ├── AchievementShelf.tsx
 │   │   │   └── ProgressDashboard.tsx
 │   │   ├── lib/
 │   │   │   ├── curriculum.ts         # loads all level .md files, parses frontmatter
+│   │   │   ├── glossary.ts           # loads curriculum/glossary.md, builds term index
 │   │   │   ├── progress.ts           # reads/writes progress.json
 │   │   │   ├── graph.ts              # builds Cytoscape elements from levels
+│   │   │   ├── recall.ts             # auto-picks recall items + drives RecallChallenge
+│   │   │   ├── translate.ts          # provider abstraction + fallback chain
 │   │   │   └── achievements.ts
 │   │   ├── hooks/
 │   │   └── styles/
@@ -293,6 +567,7 @@ road-to-ai/                           # monorepo root (public)
 ├── curriculum/                       # CC-BY-SA 4.0 AI content (flagship)
 │   ├── README.md                     # curriculum overview, tier map
 │   ├── meta.json                     # tier names, achievement definitions, tier-band thresholds
+│   ├── glossary.md                   # shared glossary — one ## heading per term
 │   ├── levels/
 │   │   ├── track-a/
 │   │   │   ├── F00_welcome.md
@@ -337,7 +612,13 @@ road-to-ai/                           # monorepo root (public)
 | Framework | React 19 | Largest contributor pool; `<ViewTransition>` enables elegant node transitions |
 | Styling | Tailwind CSS v4 | Fast UI iteration; no bespoke CSS |
 | Graph viz | Cytoscape.js | Battle-tested, handles 200+ nodes, pan/zoom/select built in |
-| Markdown | remark + remark-gfm + gray-matter | Frontmatter parsing + GFM support |
+| Markdown | remark + remark-gfm + remark-math + gray-matter | Frontmatter + GFM + math syntax |
+| Diagrams | Mermaid | In-level architecture and flow diagrams |
+| Math | KaTeX (via `rehype-katex`) | Inline + block math rendering with MathML fallback |
+| Code highlight | Shiki | VS Code themes, light + dark |
+| Motion | Framer Motion + React 19 `<ViewTransition>` | Subtle accent animations, direction-aware page transitions |
+| Icons | Lucide React | Clean, consistent, tree-shakeable |
+| Fonts | `@fontsource/*` (Inter, Fraunces, JetBrains Mono) | Offline-capable, no CDN dependency |
 | State | Zustand | Minimal, zero-boilerplate, suits single-user local state |
 | Testing | Vitest + React Testing Library + Playwright | Standard stack for Vite+React |
 | Hosting | GitHub Pages | Free, static, auto-deploy from `main` via GitHub Actions |
@@ -412,29 +693,37 @@ Four milestones; each ends with a push to `main` that triggers a GitHub Pages re
 
 - `curriculum/meta.json` + `curriculum/levels/track-a/` with ~3 example levels
 - `platform/src/lib/curriculum.ts` fetches and parses levels with frontmatter
-- `SkillTree.tsx` renders Cytoscape graph with node styling: locked / unlocked / in-progress / done
-- `LevelPane.tsx` opens on click; renders objectives/tasks/resources
+- `SkillTree.tsx` renders Cytoscape graph with node styling: locked / unlocked / in-progress / done, tier-color accents
+- `LevelPane.tsx` opens on click; renders objectives/tasks/resources with **Mermaid diagrams, KaTeX math, and Shiki code highlighting** working end-to-end
+- Typography stack loaded via `@fontsource`; light + dark themes
 - Basic responsive layout
-- **Deliverable:** click a node, see its level; see the graph grow as levels are added
+- **Deliverable:** click a node, see its level; see diagrams, equations, and code render correctly
 
 ### M3 — Gamification core (1–2 sessions)
 
 - `progress.ts` — atomic read/write of `progress.json`
 - `XpBar.tsx` + `TierBadge.tsx` + `AchievementShelf.tsx`
 - "Mark done" action in `LevelPane` updates `progress.json` and re-renders graph
-- Achievements engine with ~6 starter achievements
+- Achievements engine with ~6 starter achievements (including the first luminary-breadth achievement)
+- `LuminarySpotlight.tsx` — renders the in-level luminary card
+- `LuminariesIndex.tsx` — aggregated `/luminaries` page with browse-by-era and cross-references
+- `glossary.ts` + `Glossary.tsx` + `GlossaryChip.tsx` + `FootnoteList.tsx`
+- Sample `curriculum/glossary.md` with ~15 starter entries used by the M4 levels
+- `recall.ts` + `RecallHeader.tsx` + `RecallChallenge.tsx` + `LevelQuiz.tsx`
+- `SelectionPopover.tsx` + `translate.ts` + `Settings.tsx`
 - `ProgressDashboard.tsx` summary screen (home)
-- **Deliverable:** complete a level in the UI, see XP go up, achievements fire
+- **Deliverable:** complete a level in the UI, see XP go up, achievements fire, meet a luminary, hover a jargon chip, read a recall header, highlight a line and translate it to your chosen language
 
 ### M4 — Flagship content + polish (1 session)
 
-- First 15 Track A levels authored end-to-end
+- First 15 Track A levels authored end-to-end (of which ~5 carry luminary spotlights, and every level has ≥1 visual element per 6.H)
+- Per-tier accent colors applied in skill tree + tier badges
+- `<ViewTransition>` + Framer Motion accents wired on level-up, navigation, achievement pops
 - Mobile-responsive refinements
-- Dark mode (default: match system)
 - Landing page with "Fork me and make your own curriculum" section
-- `CONTRIBUTING.md` describes how to add a curriculum of any subject
+- `CONTRIBUTING.md` describes how to add a curriculum of any subject, including luminary-spotlight and visual-authoring guidance
 - `CLAUDE.md` + all 7 slash commands authored
-- **Deliverable:** the learner can start Tier 0 today
+- **Deliverable:** the learner can start Tier 0 today — and the app looks and feels inviting, not clinical
 
 Total: ~5–7 focused Claude sessions (~10–20 working hours).
 
@@ -454,6 +743,11 @@ Total: ~5–7 focused Claude sessions (~10–20 working hours).
 - **Platform reusability test:** a second fork exists with a different subject (even a toy one) and renders correctly.
 - **No time-pressure mechanics** have been introduced by contributor PRs (or if proposed, rejected with reference to this spec).
 - **Lineage rule holds:** every authored level has a populated "Why this level matters (lineage)" section.
+- **Luminary presence:** roughly 1 in 3 authored levels carries a luminary spotlight, and the `/luminaries` page aggregates at least 10 distinct figures by the end of M4.
+- **Glossary presence:** the global glossary has ≥15 entries by M4 end, every authored level with jargon declares its `glossary_terms`, and chips render correctly in the body.
+- **Visual density:** every M4 level contains ≥1 visual element (Mermaid diagram, equation, image, or code block). Per-tier accent colors visible and accessible (WCAG AA) in both themes.
+- **Recall working end-to-end:** auto-recall header renders, at least one level has an authored quiz, one Recall Challenge fires after completing 5 levels in testing.
+- **Translation working end-to-end:** text selection triggers the popover; on-device translation works on a supported browser; external fallback works on other browsers; language preference persists in Settings.
 
 ## 11. Risks & open questions
 
@@ -462,6 +756,13 @@ Total: ~5–7 focused Claude sessions (~10–20 working hours).
 - **Cold-start frustration on Track B.** If P01–P05 prove too difficult even with the annotated-companion scaffolding, insert a "P00 — How to read a paper: Keshav's three-pass method" level and loop through Karpathy + 3Blue1Brown videos before engaging with any paper.
 - **Scope creep via side quests.** The 10 optional branches are real commitments. If Xavier wants to pause or drop one mid-curriculum, the modular design permits it; we do not re-plan the whole curriculum to account for drops.
 - **Domain-agnosticism slippage.** Platform contributors may unintentionally hardcode AI terms. Enforce with a CI grep check that flags forbidden strings (e.g., "transformer", "LLM", "neural") in `platform/src/`.
+- **Glossary chip noise.** If too many terms are chipped in a single level, the body becomes visually noisy. Mitigation: `glossary_terms` is opt-in per level (not automatic), and authoring rule recommends chipping only on first/key occurrences.
+- **Luminary photo licensing.** Reproducing photos is a copyright risk. Mitigation: photos are linked (not self-hosted) from Wikimedia Commons; if a figure has no free-use photo, the spotlight shows an initials avatar or a styled monogram instead.
+- **Bundle size creep.** Mermaid + KaTeX + Shiki + Framer Motion are all non-trivial dependencies. Mitigation: dynamic-import per-level-pane for Mermaid/KaTeX (only loaded when a level actually uses them); Shiki themes lazy-loaded; bundle budget tracked in CI.
+- **Visual-design bikeshedding.** Color palettes and font choices are infinitely tweakable. Mitigation: M2 ships with the defaults spec'd in 6.H; any changes require a one-line design-log entry in `docs/design-decisions.md` to avoid thrashing.
+- **Recall fatigue.** Too many Recall Challenges will annoy the learner. Mitigation: cadence is "after ~5 completed levels on a track," not every 5 calendar days; all challenges are dismissible; no punishment for skipping.
+- **Translation API fragmentation.** The browser Translation API ships unevenly across browsers in 2026. Mitigation: external fallback is always present; user can opt into API key path; graceful degradation is designed in, not added later.
+- **Spec scope expansion.** This document has grown significantly during brainstorming (recall, translate, visuals, luminaries, glossary, footnotes all added after initial design). Mitigation: all of these are now M3/M4 scope; any *further* additions from here will go into a "v2 features" list rather than expanding M1–M4.
 - **Obsidian compatibility.** The markdown + YAML frontmatter format is Obsidian-compatible by accident. This is a feature; we should not break it.
 
 ## 12. Next steps
