@@ -33,7 +33,12 @@ export const useStore = create<StoreState>((set, get) => ({
     });
     set({ levels, loaded: true });
   },
-  select(id) { set({ selectedId: id }); },
+  select(id) {
+    set({ selectedId: id });
+    if (typeof window !== "undefined") {
+      window.location.hash = id ? `#/level/${id}` : "#/";
+    }
+  },
   markDone(id) {
     const s = get();
     const level = s.levels.find((l) => l.id === id);
