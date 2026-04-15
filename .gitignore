@@ -1,0 +1,8 @@
+# gitignored (per-user, not for forks)
+progress.json
+notes/
+notebooks/
+papers/
+node_modules/
+.DS_Store
+
