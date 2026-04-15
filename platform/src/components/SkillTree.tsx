@@ -25,30 +25,40 @@ function buildStylesheet(): cytoscape.StylesheetStyle[] {
     {
       selector: "node",
       style: {
+        shape: "round-rectangle",
         "background-color": surface,
         "border-width": 1,
         "border-color": border,
-        label: "data(label)",
+        label: "data(id)",
         "font-family": mono,
-        "font-size": 10,
+        "font-size": 11,
+        "font-weight": 600,
         color: fg,
-        "text-valign": "bottom",
-        "text-margin-y": 6,
-        width: 32,
-        height: 32,
+        "text-valign": "center",
+        "text-halign": "center",
+        width: 56,
+        height: 36,
       },
     },
     {
       selector: 'node[status = "done"]',
-      style: { "background-color": accent, "border-color": accent },
+      style: {
+        "background-color": accent,
+        "border-color": accent,
+        color: "#060610",
+      },
     },
     {
       selector: 'node[status = "in-progress"]',
-      style: { "border-color": accent, "border-width": 3 },
+      style: { "border-color": accent, "border-width": 2 },
     },
     {
       selector: 'node[unlocked = "false"]',
-      style: { opacity: 0.35 },
+      style: { opacity: 0.4 },
+    },
+    {
+      selector: "node:selected",
+      style: { "border-color": accent, "border-width": 2 },
     },
     {
       selector: "edge",
@@ -57,6 +67,7 @@ function buildStylesheet(): cytoscape.StylesheetStyle[] {
         "line-color": border,
         "target-arrow-color": border,
         "target-arrow-shape": "triangle",
+        "arrow-scale": 0.8,
         "curve-style": "bezier",
       },
     },
@@ -81,8 +92,15 @@ export function SkillTree({ levels, onSelect }: SkillTreeProps) {
       container: containerRef.current,
       elements: elements as cytoscape.ElementDefinition[],
       style: buildStylesheet(),
-      layout: { name: "breadthfirst", directed: true, padding: 24, spacingFactor: 1.2 },
-      wheelSensitivity: 0.2,
+      layout: {
+        name: "breadthfirst",
+        directed: true,
+        padding: 48,
+        spacingFactor: 1.6,
+        grid: true,
+      },
+      minZoom: 0.4,
+      maxZoom: 2,
     });
     cyRef.current.on("tap", "node", (evt) => {
       const id = evt.target.data("id") as string | undefined;
