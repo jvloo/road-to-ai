@@ -16,6 +16,7 @@ build/
 .cache/
 .turbo/
 .vite/
+*.tsbuildinfo
 
 # Env / local
 .env
