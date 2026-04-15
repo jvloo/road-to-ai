@@ -9,6 +9,12 @@
 
 Live app: https://jvloo.github.io/road-to-ai/
 
+## Preview
+
+![Road to AI (dark mode)](docs/screenshots/hero-dark.png)
+
+Live: https://jvloo.github.io/road-to-ai/
+
 ## Quick start (learner)
 
 Visit the live app. No install required. Your progress lives in your browser (`localStorage`).

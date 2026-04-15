@@ -86,7 +86,7 @@ export function SkillTree({ levels, onSelect }: SkillTreeProps) {
       <div
         ref={containerRef}
         data-testid="skill-tree"
-        className="h-[70vh] w-full rounded border border-[var(--color-border)]"
+        className="h-[50vh] md:h-[70vh] w-full rounded border border-[var(--color-border)]"
         role="img"
         aria-label="Skill tree graph"
       />

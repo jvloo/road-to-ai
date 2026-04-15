@@ -12,7 +12,7 @@ export function LevelPage() {
 
   return (
     <div className="fixed inset-0 z-10 flex bg-[var(--color-bg)]/95 backdrop-blur">
-      <div className="mx-auto my-8 w-full max-w-3xl overflow-auto rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)]">
+      <div className="mx-auto my-2 md:my-8 w-full max-w-3xl overflow-auto rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)]">
         <div className="flex justify-end p-4">
           <button
             onClick={() => select(null)}
