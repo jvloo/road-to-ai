@@ -2,6 +2,7 @@ import { create } from "zustand";
 import type { Level } from "@/lib/types";
 import { loadCurriculum } from "@/lib/curriculum";
 import { loadProgress, markLevelDone, saveProgress, type Progress } from "@/lib/progress";
+import { checkAchievements } from "@/lib/achievements";
 
 interface StoreState {
   levels: Level[];
@@ -33,11 +34,15 @@ export const useStore = create<StoreState>((set, get) => ({
     const s = get();
     const level = s.levels.find((l) => l.id === id);
     if (!level) return;
-    const progress = markLevelDone(s.progress, id, level.xp);
-    saveProgress(progress);
+    let progress = markLevelDone(s.progress, id, level.xp);
     const levels = s.levels.map((l) =>
       l.id === id ? { ...l, status: "done" as const, completed_at: new Date().toISOString().slice(0, 10) } : l,
     );
+    const newAwards = checkAchievements(progress, levels);
+    if (newAwards.length) {
+      progress = { ...progress, achievements: [...progress.achievements, ...newAwards] };
+    }
+    saveProgress(progress);
     set({ progress, levels });
   },
 }));
