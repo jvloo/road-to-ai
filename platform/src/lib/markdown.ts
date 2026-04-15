@@ -5,6 +5,8 @@ import remarkMath from "remark-math";
 import remarkRehype from "remark-rehype";
 import rehypeKatex from "rehype-katex";
 import rehypeStringify from "rehype-stringify";
+import { highlightHtml } from "./shiki";
+import { renderMermaid } from "./mermaid";
 
 export async function renderMarkdown(source: string): Promise<string> {
   const file = await unified()
@@ -15,5 +17,8 @@ export async function renderMarkdown(source: string): Promise<string> {
     .use(rehypeKatex)
     .use(rehypeStringify)
     .process(source);
-  return String(file);
+  let html = String(file);
+  html = await renderMermaid(html);
+  html = await highlightHtml(html);
+  return html;
 }
