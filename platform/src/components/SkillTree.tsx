@@ -9,46 +9,59 @@ export interface SkillTreeProps {
   onSelect: (levelId: string) => void;
 }
 
-const STYLE: cytoscape.StylesheetStyle[] = [
-  {
-    selector: "node",
-    style: {
-      "background-color": "var(--color-surface)",
-      "border-width": 1,
-      "border-color": "var(--color-border)",
-      label: "data(label)",
-      "font-family": "var(--font-mono)",
-      "font-size": 10,
-      color: "var(--color-fg)",
-      "text-valign": "bottom",
-      "text-margin-y": 6,
-      width: 32,
-      height: 32,
+function readToken(name: string, fallback: string): string {
+  if (typeof window === "undefined") return fallback;
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return v || fallback;
+}
+
+function buildStylesheet(): cytoscape.StylesheetStyle[] {
+  const surface = readToken("--color-surface", "#0c0c1a");
+  const border = readToken("--color-border", "#18182a");
+  const fg = readToken("--color-fg", "#e4e4f0");
+  const accent = readToken("--color-accent", "#22d3ee");
+  const mono = readToken("--font-mono", "monospace");
+  return [
+    {
+      selector: "node",
+      style: {
+        "background-color": surface,
+        "border-width": 1,
+        "border-color": border,
+        label: "data(label)",
+        "font-family": mono,
+        "font-size": 10,
+        color: fg,
+        "text-valign": "bottom",
+        "text-margin-y": 6,
+        width: 32,
+        height: 32,
+      },
     },
-  },
-  {
-    selector: 'node[status = "done"]',
-    style: { "background-color": "var(--color-accent)", "border-color": "var(--color-accent)" },
-  },
-  {
-    selector: 'node[status = "in-progress"]',
-    style: { "border-color": "var(--color-accent)", "border-width": 3 },
-  },
-  {
-    selector: 'node[unlocked = "false"]',
-    style: { opacity: 0.35 },
-  },
-  {
-    selector: "edge",
-    style: {
-      width: 1,
-      "line-color": "var(--color-border)",
-      "target-arrow-color": "var(--color-border)",
-      "target-arrow-shape": "triangle",
-      "curve-style": "bezier",
+    {
+      selector: 'node[status = "done"]',
+      style: { "background-color": accent, "border-color": accent },
     },
-  },
-];
+    {
+      selector: 'node[status = "in-progress"]',
+      style: { "border-color": accent, "border-width": 3 },
+    },
+    {
+      selector: 'node[unlocked = "false"]',
+      style: { opacity: 0.35 },
+    },
+    {
+      selector: "edge",
+      style: {
+        width: 1,
+        "line-color": border,
+        "target-arrow-color": border,
+        "target-arrow-shape": "triangle",
+        "curve-style": "bezier",
+      },
+    },
+  ];
+}
 
 export function SkillTree({ levels, onSelect }: SkillTreeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -67,7 +80,7 @@ export function SkillTree({ levels, onSelect }: SkillTreeProps) {
     cyRef.current = cytoscape({
       container: containerRef.current,
       elements: elements as cytoscape.ElementDefinition[],
-      style: STYLE,
+      style: buildStylesheet(),
       layout: { name: "breadthfirst", directed: true, padding: 24, spacingFactor: 1.2 },
       wheelSensitivity: 0.2,
     });

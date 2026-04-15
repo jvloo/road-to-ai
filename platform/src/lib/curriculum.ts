@@ -1,4 +1,4 @@
-import matter from "gray-matter";
+import yaml from "js-yaml";
 import type { Level, LevelFrontmatter } from "./types";
 
 function basename(p: string): string {
@@ -6,8 +6,18 @@ function basename(p: string): string {
   return m ? (m[1] as string) : p;
 }
 
+function splitFrontmatter(source: string): { data: unknown; content: string } {
+  const normalized = source.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
+  if (!normalized.startsWith("---\n")) return { data: {}, content: normalized };
+  const end = normalized.indexOf("\n---", 4);
+  if (end === -1) return { data: {}, content: normalized };
+  const yamlBlock = normalized.slice(4, end);
+  const rest = normalized.slice(end + 4).replace(/^\n/, "");
+  return { data: yaml.load(yamlBlock) ?? {}, content: rest };
+}
+
 export function parseLevel(source: string, sourcePath: string): Level {
-  const { data, content } = matter(source);
+  const { data, content } = splitFrontmatter(source);
   const fm = data as Partial<LevelFrontmatter>;
 
   if (!fm.id) throw new Error(`Level at ${sourcePath} is missing required frontmatter: id`);
