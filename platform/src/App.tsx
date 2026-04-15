@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { HomePage } from "./pages/HomePage";
 import { LevelView } from "./pages/LevelView";
-import { LuminariesIndex } from "./components/LuminariesIndex";
-import { Glossary } from "./components/Glossary";
+import { LibraryPage } from "./pages/LibraryPage";
 import { RecallChallenge } from "./components/RecallChallenge";
-import { Settings } from "./components/Settings";
 import { SelectionPopover } from "./components/SelectionPopover";
 import { useStore } from "./store/useStore";
 
@@ -46,12 +44,8 @@ export default function App() {
   let content;
   if (levelId) {
     content = <LevelView levelId={levelId} />;
-  } else if (hash === "#/glossary") {
-    content = <Glossary />;
-  } else if (hash === "#/luminaries") {
-    content = <LuminariesIndex levels={levels} />;
-  } else if (hash === "#/settings") {
-    content = <Settings />;
+  } else if (hash.startsWith("#/library")) {
+    content = <LibraryPage />;
   } else {
     content = <HomePage />;
   }
