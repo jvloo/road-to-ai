@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Level } from "@/lib/types";
 import { renderMarkdown } from "@/lib/markdown";
 import { Divider } from "./Divider";
+import { LuminarySpotlight } from "./LuminarySpotlight";
 
 export interface LevelPaneProps {
   level: Level;
@@ -33,6 +34,8 @@ export function LevelPane({ level, onMarkDone }: LevelPaneProps) {
       <p className="mt-2 font-mono text-xs text-[var(--color-muted)]">
         {level.xp} XP · {level.status}
       </p>
+
+      {level.luminary && <LuminarySpotlight name={level.luminary} />}
 
       <Divider>content</Divider>
       <div
