@@ -1,11 +1,18 @@
+import { renderMarkdown } from "./markdown";
+
 export interface GlossaryEntry {
   term: string;
-  body: string;
+  body: string; // rendered HTML (after renderMarkdown)
 }
 
-export function parseGlossary(source: string): GlossaryEntry[] {
+export interface RawGlossaryEntry {
+  term: string;
+  body: string; // raw markdown
+}
+
+export function parseGlossary(source: string): RawGlossaryEntry[] {
   const lines = source.split("\n");
-  const entries: GlossaryEntry[] = [];
+  const entries: RawGlossaryEntry[] = [];
   let current: { term: string; buf: string[] } | null = null;
   for (const line of lines) {
     const m = /^## (.+)$/.exec(line);
@@ -27,5 +34,9 @@ export async function loadGlossary(): Promise<GlossaryEntry[]> {
     import: "default",
   }) as Record<string, string>;
   const src = Object.values(modules)[0] ?? "";
-  return parseGlossary(src);
+  const raw = parseGlossary(src);
+  const rendered = await Promise.all(
+    raw.map(async (e) => ({ term: e.term, body: await renderMarkdown(e.body) })),
+  );
+  return rendered;
 }
