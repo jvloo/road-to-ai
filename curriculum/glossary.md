@@ -23,3 +23,9 @@ A level that must be completed before another unlocks. Declared in frontmatter a
 
 ## Boss level
 A mandatory capstone at the end of each tier that produces a concrete artifact (a trained model, a from-scratch implementation, a reproduction).
+
+## learning-rate
+**Learning rate (η).** The step size in gradient descent; too high causes oscillation, too low stalls progress. In modern deep learning, *schedulers* vary η across training (warmup, cosine decay).
+
+## loss-surface
+**Loss surface.** The multi-dimensional graph of the loss function over all parameters of a model. Training is a walk on this surface, seeking low-loss regions. Deep-net loss surfaces are non-convex but (surprisingly) "benign" — local minima tend to be close in quality to global minima (Choromanska 2014).
