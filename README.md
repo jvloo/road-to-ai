@@ -1,4 +1,4 @@
-# Road to AI
+# [WIP] Road to AI
 
 > A gamified, open-source path from math to world models — fork it and make your own.
 
