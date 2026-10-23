@@ -7,7 +7,7 @@
 1. A **reusable React platform** that renders any markdown-based gamified curriculum as an interactive skill tree with levels, XP, achievements, and spaced-recall. Domain-agnostic: fork it, drop in your own `curriculum/` folder, and teach anything.
 2. A **flagship AI curriculum** — a cold-start-friendly, foundations-first path through classical AI, ML, Deep Learning, Reinforcement Learning, LLMs, Agentic AI, and World Models, with explicit lineage connecting classical ideas to their modern descendants.
 
-Live app: https://jvloo.github.io/road-to-ai/
+Live app: https://apps.xavierloo.com/road-to-ai/
 
 ## Preview
 
